@@ -9,6 +9,6 @@ fn handle_spin_prototype(req: Request) -> anyhow::Result<impl IntoResponse> {
     http::Response::builder()
       .status(200)
       .header("content-type", "text/plain")
-      .body("Hello, World!")?,
+      .body("Hello, World!!!")?,
   )
 }

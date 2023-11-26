@@ -1,18 +1,19 @@
 spin_manifest_version = 2
 
 [application]
-name = "spin-prototype"
-version = "0.0.0-SNAPSHOT"
 authors = ["David Wallace Croft <david@CroftSoft.com>"]
 description = "Prototype of a Fermyon Spin application"
+name = "spin-prototype"
+version = "0.0.0-SNAPSHOT"
 
 [[trigger.http]]
-route = "/..."
 component = "spin-prototype"
+route = "/..."
 
 [component.spin-prototype]
-source = "target/wasm32-wasi/release/spin_prototype.wasm"
 allowed_outbound_hosts = []
+source = "target/wasm32-wasi/release/spin_prototype.wasm"
+
 [component.spin-prototype.build]
 command = "cargo build --target wasm32-wasi --release"
 watch = ["src/**/*.rs", "Cargo.toml"]
