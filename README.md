@@ -5,7 +5,8 @@
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [mit-url]: https://github.com/david-wallace-croft/spin-prototype/blob/main/LICENSE.txt
 
-- My first First Spin application
+- My first Fermyon Spin application
+  - https://developer.fermyon.com/spin/v2/install
 
 ## Usage
 
