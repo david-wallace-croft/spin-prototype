@@ -7,14 +7,27 @@ name = "spin-prototype"
 version = "0.0.0-SNAPSHOT"
 
 [[trigger.http]]
-component = "spin-prototype"
-route = "/..."
+route = "/test1/..."
+component = "test1"
 
-[component.spin-prototype]
+[component.test1]
+source = "test1/target/wasm32-wasi/release/test1.wasm"
+allowed_outbound_hosts = []
+[component.test1.build]
+command = "cargo build --target wasm32-wasi --release"
+workdir = "test1"
+watch = ["src/**/*.rs", "Cargo.toml"]
+
+[[trigger.http]]
+route = "/test2/..."
+component = "test2"
+
+[component.test2]
+source = "test2/target/wasm32-wasi/release/test2.wasm"
 allowed_outbound_hosts = []
 key_value_stores = ["default"]
-source = "target/wasm32-wasi/release/spin_prototype.wasm"
 
-[component.spin-prototype.build]
+[component.test2.build]
 command = "cargo build --target wasm32-wasi --release"
+workdir = "test2"
 watch = ["src/**/*.rs", "Cargo.toml"]
