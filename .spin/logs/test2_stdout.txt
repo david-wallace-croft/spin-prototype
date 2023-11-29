@@ -1,4 +1,0 @@
-Storing value in the KV store with "/test2/test" as the key
-Found value for the key "/test2/test"
-Delete key "/test2/test"
-No value found for the key "/test2/test"

@@ -1,2 +1,0 @@
-Handling request to Some(HeaderValue { inner: String("http://localhost:3000/test1") })
-Handling request to Some(HeaderValue { inner: String("http://localhost:3000/test1/") })
