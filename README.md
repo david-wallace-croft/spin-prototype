@@ -13,6 +13,19 @@
   - https://developer.fermyon.com/spin/v2/install
 - spin build
 - spin up
+  - If running on Windows, you might have to do some workarounds
+    - See https://github.com/fermyon/spin/issues/2112
+    - Build spin-fileserver in a sibling directory
+      - cd ../spin-fileserver
+      - cargo build --release
+      - cd ../spin-prototype
+    - Update the path to spin_static_fs.wasm in spin.toml
+    - spin up --direct-mounts
+
+## Test 0
+- Demonstrates using a static file server
+- http://localhost:3000/test0
+  - Shows "test0"
 
 ## Test 1
 

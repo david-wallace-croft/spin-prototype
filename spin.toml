@@ -6,28 +6,39 @@ description = "Prototype of a Fermyon Spin application"
 name = "spin-prototype"
 version = "0.0.0-SNAPSHOT"
 
-[[trigger.http]]
-route = "/test1/..."
-component = "test1"
+[component.test0]
+files = [{ source = "assets", destination = "/" }]
+# https://github.com/fermyon/spin/issues/2112
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.2.1/spin_static_fs.wasm", digest = "sha256:5f05b15f0f7cd353d390bc5ebffec7fe25c6a6d7a05b9366c86dcb1a346e9f0f" }
+# source = "../spin-fileserver/target/wasm32-wasi/release/spin_static_fs.wasm"
 
 [component.test1]
-source = "test1/target/wasm32-wasi/release/test1.wasm"
 allowed_outbound_hosts = []
+source = "test1/target/wasm32-wasi/release/test1.wasm"
+
 [component.test1.build]
 command = "cargo build --target wasm32-wasi --release"
-workdir = "test1"
 watch = ["src/**/*.rs", "Cargo.toml"]
-
-[[trigger.http]]
-route = "/test2/..."
-component = "test2"
+workdir = "test1"
 
 [component.test2]
-source = "test2/target/wasm32-wasi/release/test2.wasm"
 allowed_outbound_hosts = []
 key_value_stores = ["default"]
+source = "test2/target/wasm32-wasi/release/test2.wasm"
 
 [component.test2.build]
 command = "cargo build --target wasm32-wasi --release"
-workdir = "test2"
 watch = ["src/**/*.rs", "Cargo.toml"]
+workdir = "test2"
+
+[[trigger.http]]
+component = "test0"
+route = "/..."
+
+[[trigger.http]]
+component = "test1"
+route = "/test1/..."
+
+[[trigger.http]]
+component = "test2"
+route = "/test2/..."
