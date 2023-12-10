@@ -31,6 +31,15 @@ command = "cargo build --target wasm32-wasi --release"
 watch = ["src/**/*.rs", "Cargo.toml"]
 workdir = "test2"
 
+[component.test3]
+allowed_outbound_hosts = []
+source = "test3/target/wasm32-wasi/release/test3.wasm"
+
+[component.test3.build]
+command = "cargo build --target wasm32-wasi --release"
+watch = ["src/**/*.rs", "Cargo.toml"]
+workdir = "test3"
+
 [[trigger.http]]
 component = "test0"
 route = "/..."
@@ -42,3 +51,7 @@ route = "/test1/..."
 [[trigger.http]]
 component = "test2"
 route = "/test2/..."
+
+[[trigger.http]]
+component = "test3"
+route = "/test3/..."

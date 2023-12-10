@@ -46,6 +46,17 @@
 - curl -i -X GET localhost:3000/test2/test
   - Fails to retrieve the deleted value for the key "test"
 
+## Test 3
+
+- Demonstrates JSON input and output
+- Post the name in a JSON object
+  - Responds with a JSON object containing a message
+```
+curl -i -X POST \
+  -d "{\"name\": \"World\"}" \
+  localhost:3000/test3
+```
+
 ## History
 
 - Initial release: 2023-11-25

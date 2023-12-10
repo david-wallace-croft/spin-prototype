@@ -1,12 +1,12 @@
-# Formatting configuration for CroftSoft Dioxus Prototype
+# Formatting configuration for the CroftSoft Spin Prototype
 # https://rust-lang.github.io/rustfmt/
 #
 # Copyright 2023 CroftSoft Inc
 # https://www.CroftSoft.com/
 # Author: David Wallace Croft
 # https://www.CroftSoft.com/people/david/
-# Created: 2023-08-09
-# Updated: 2023-08-09
+# Created: 2023-11-25
+# Updated: 2023-11-25
 
 array_width = 1
 # condense_wildcard_suffixes = true
