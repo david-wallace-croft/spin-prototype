@@ -57,6 +57,11 @@ curl -i -X POST \
   localhost:3000/test3
 ```
 
+## Test 4
+
+- Demonstrates use of a Large Language Model (LLM)
+- TODO: Not yet done
+
 ## History
 
 - Initial release: 2023-11-25
