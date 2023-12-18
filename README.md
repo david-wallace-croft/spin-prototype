@@ -60,7 +60,11 @@ curl -i -X POST \
 ## Test 4
 
 - Demonstrates use of a Large Language Model (LLM)
-- TODO: Not yet done
+```
+curl -i -X POST \
+  -d "{\"characters\": [\"Gilgamesh\", \"Utnapishtim\"]}" \
+  localhost:3000/test4
+```
 
 ## History
 

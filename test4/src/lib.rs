@@ -5,11 +5,16 @@ use spin_sdk::http::{IntoResponse, Json, Response};
 use spin_sdk::llm::InferencingResult;
 use spin_sdk::{http_component, llm};
 
-#[derive(Deserialize)]
+#[derive(Clone, Deserialize)]
 struct Input {
-  characters: Vec<String>,
-  objects: Vec<String>,
-  place: String,
+  #[serde(default)]
+  characters: Option<Vec<String>>,
+  #[serde(default)]
+  objects: Option<Vec<String>>,
+  #[serde(default)]
+  place: Option<String>,
+  #[serde(default)]
+  theme: Option<String>,
 }
 
 #[derive(Serialize)]
@@ -32,11 +37,8 @@ fn handle_request(
   let (status, body): (StatusCode, Option<Output>) = match *req.method() {
     Method::POST => {
       let json_input: &Json<Input> = req.body();
-      let output = confabulate(
-        &json_input.characters,
-        &json_input.objects,
-        &json_input.place,
-      );
+      let input: Input = json_input.0.clone();
+      let output = confabulate(input);
       (StatusCode::OK, Some(output))
     },
     _ => (StatusCode::METHOD_NOT_ALLOWED, None),
@@ -49,12 +51,8 @@ fn handle_request(
   Ok(response)
 }
 
-fn confabulate(
-  characters: &[String],
-  objects: &[String],
-  place: &str,
-) -> Output {
-  let prompt = make_prompt(characters, objects, place);
+fn confabulate(input: Input) -> Output {
+  let prompt = make_prompt(input);
   let options = llm::InferencingParams {
     max_tokens: 1000,
     repeat_penalty: 1.2,
@@ -117,21 +115,29 @@ fn make_include_prompt(
   include_prompt
 }
 
-fn make_prompt(
-  characters: &[String],
-  objects: &[String],
-  place: &str,
-) -> String {
-  let mut prompt = "Tell an engaging Christmas story. \
+fn make_prompt(input: Input) -> String {
+  let mut prompt = "Tell a story. \
     The story should have a happy ending. \
-    The story should have a theme of joy. \
     The story should be between 250 and 500 words long. "
     .to_owned();
-  prompt.push_str(&format!(
-    "The story should take place in the following location: {}. ",
-    place
-  ));
-  prompt.push_str(&make_include_prompt(characters, "characters", "character"));
-  prompt.push_str(&make_include_prompt(objects, "objects", "object"));
+  if let Some(theme) = input.theme {
+    prompt.push_str(&format!("The story should have a theme of {}. ", theme));
+  }
+  if let Some(place) = input.place {
+    prompt.push_str(&format!(
+      "The story should take place in the following location: {}. ",
+      place
+    ));
+  }
+  if let Some(characters) = input.characters {
+    prompt.push_str(&make_include_prompt(
+      &characters,
+      "characters",
+      "character",
+    ));
+  }
+  if let Some(objects) = input.objects {
+    prompt.push_str(&make_include_prompt(&objects, "objects", "object"));
+  }
   prompt
 }
