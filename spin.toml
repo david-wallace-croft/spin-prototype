@@ -41,13 +41,14 @@ watch = ["src/**/*.rs", "Cargo.toml"]
 workdir = "test3"
 
 [component.test4]
-source = "test4/target/wasm32-wasi/release/test4.wasm"
+ai_models = ["llama2-chat"]
 allowed_outbound_hosts = []
+source = "test4/target/wasm32-wasi/release/test4.wasm"
 
 [component.test4.build]
 command = "cargo build --target wasm32-wasi --release"
-workdir = "test4"
 watch = ["src/**/*.rs", "Cargo.toml"]
+workdir = "test4"
 
 [[trigger.http]]
 component = "test0"

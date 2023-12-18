@@ -1,9 +1,9 @@
 [package]
-name = "test4"
 authors = ["David Wallace Croft <david@CroftSoft.com>"]
 description = "Large Language Model (LLM) example"
-version = "0.1.0"
 edition = "2021"
+name = "test4"
+version = "0.1.0"
 
 [lib]
 crate-type = ["cdylib"]
@@ -11,6 +11,8 @@ crate-type = ["cdylib"]
 [dependencies]
 anyhow = "1"
 http = "0.2"
+serde = { version = "1.0.193", features = ["derive"] }
+serde_json = "1.0.108"
 spin-sdk = { git = "https://github.com/fermyon/spin", tag = "v2.0.1" }
 
 [workspace]
