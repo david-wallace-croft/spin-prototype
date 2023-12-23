@@ -66,6 +66,11 @@ curl -i -X POST \
   localhost:3000/test4
 ```
 
+## Test 5
+- Demonstrates calling a REST API from a Spin Component
+- http://localhost:3000/test5?name=World
+  - Shows relayed output from Test 3
+
 ## Links
 
 - Fermyon Spin
