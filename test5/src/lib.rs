@@ -1,16 +1,10 @@
-use std::collections::HashMap;
-
 use http::StatusCode;
 use serde::{Deserialize, Serialize};
 use spin_sdk::http::conversions::{FromBody, IntoBody};
 use spin_sdk::http::{send, IntoResponse, Request, Response};
 use spin_sdk::http_component;
+use std::collections::HashMap;
 use url::Url;
-
-#[derive(Deserialize)]
-struct Test5Input {
-  name: String,
-}
 
 #[derive(Serialize)]
 struct Test3Input {
@@ -51,11 +45,9 @@ async fn handle_request(request: Request) -> anyhow::Result<impl IntoResponse> {
   let mut name = "World".to_string();
   let uri: &str = request.uri();
   let parsed_url = Url::parse(uri);
-  dbg!(&parsed_url);
   if let Ok(parsed_url) = parsed_url {
     let map: HashMap<String, String> =
       parsed_url.query_pairs().into_owned().collect();
-    dbg!(&map);
     let name_value = map.get("name");
     if let Some(name_value) = name_value {
       name = name_value.to_string();
