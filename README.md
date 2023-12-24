@@ -37,6 +37,8 @@
 
 - From a Key-Value store example
   - https://github.com/fermyon/spin/tree/main/examples/rust-key-value
+- Also demonstrates how to use the Spin Router
+  - https://developer.fermyon.com/spin/v2/rust-components#routing-in-a-component
 - curl -i -X POST -d "ok!" localhost:3000/test2/test
   - Stores the value "ok!" for the key "test"
 - curl -i --head localhost:3000/test2/test
