@@ -1,59 +1,68 @@
-use http::{Method, StatusCode};
+use http::StatusCode;
 use spin_sdk::{
-  http::{IntoResponse, Response},
+  http::{IntoResponse, Params, Request, Response, Router},
   http_component,
   key_value::Store,
 };
 
 #[http_component]
-fn handle_request(
-  req: http::Request<Vec<u8>>
-) -> anyhow::Result<impl IntoResponse> {
-  // Open the default key-value store
-  let store = Store::open_default()?;
+fn handle_request(req: Request) -> Response {
+  let mut router = Router::new();
+  router.delete("/test2/:key", handle_delete);
+  router.get("/test2/:key", handle_get);
+  router.head("/test2/:key", handle_head);
+  router.post("/test2/:key", handle_post);
+  router.handle(req)
+}
 
-  let (status, body) = match *req.method() {
-    Method::POST => {
-      // Add the request (URI, body) tuple to the store
-      store.set(req.uri().path(), req.body().as_slice())?;
-      println!(
-        "Storing value in the KV store with {:?} as the key",
-        req.uri().path()
-      );
-      (StatusCode::OK, None)
-    },
-    Method::GET => {
-      // Get the value associated with the request URI, or return a 404 if it's not present
-      match store.get(req.uri().path())? {
-        Some(value) => {
-          println!("Found value for the key {:?}", req.uri().path());
-          (StatusCode::OK, Some(value))
-        },
-        None => {
-          println!("No value found for the key {:?}", req.uri().path());
-          (StatusCode::NOT_FOUND, None)
-        },
-      }
-    },
-    Method::DELETE => {
-      // Delete the value associated with the request URI, if present
-      store.delete(req.uri().path())?;
-      println!("Delete key {:?}", req.uri().path());
-      (StatusCode::OK, None)
-    },
-    Method::HEAD => {
-      // Like GET, except do not return the value
-      let code = if store.exists(req.uri().path())? {
-        println!("{:?} key found", req.uri().path());
-        StatusCode::OK
-      } else {
-        println!("{:?} key not found", req.uri().path());
-        StatusCode::NOT_FOUND
-      };
-      (code, None)
-    },
-    // No other methods are currently supported
-    _ => (StatusCode::METHOD_NOT_ALLOWED, None),
+fn handle_delete(
+  _req: Request,
+  params: Params,
+) -> anyhow::Result<impl IntoResponse> {
+  let key = params.get("key").expect("key not found");
+  println!("Delete key {key}");
+  let store = Store::open_default()?;
+  store.delete(key)?;
+  Ok(Response::new(StatusCode::OK, None::<Vec<u8>>))
+}
+
+fn handle_get(
+  _req: Request,
+  params: Params,
+) -> anyhow::Result<impl IntoResponse> {
+  let key = params.get("key").expect("key not found");
+  println!("Get key {key}");
+  let store = Store::open_default()?;
+  let value: Option<Vec<u8>> = store.get(key)?;
+  match value {
+    Some(value) => Ok(Response::new(StatusCode::OK, value)),
+    None => Ok(Response::new(StatusCode::NOT_FOUND, None::<Vec<u8>>)),
+  }
+}
+
+fn handle_head(
+  _req: Request,
+  params: Params,
+) -> anyhow::Result<impl IntoResponse> {
+  let key = params.get("key").expect("key not found");
+  println!("Head key {key}");
+  let store = Store::open_default()?;
+  let value: Option<Vec<u8>> = store.get(key)?;
+  let code = if value.is_some() {
+    StatusCode::OK
+  } else {
+    StatusCode::NOT_FOUND
   };
-  Ok(Response::new(status, body))
+  Ok(Response::new(code, None::<Vec<u8>>))
+}
+
+fn handle_post(
+  req: Request,
+  params: Params,
+) -> anyhow::Result<impl IntoResponse> {
+  let key = params.get("key").expect("key not found");
+  println!("Post key {key}");
+  let store = Store::open_default()?;
+  store.set(key, req.body())?;
+  Ok(Response::new(StatusCode::OK, None::<Vec<u8>>))
 }

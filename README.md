@@ -39,12 +39,14 @@
   - https://github.com/fermyon/spin/tree/main/examples/rust-key-value
 - curl -i -X POST -d "ok!" localhost:3000/test2/test
   - Stores the value "ok!" for the key "test"
+- curl -i --head localhost:3000/test2/test
+  - A value is found for the key "test"
 - curl -i -X GET localhost:3000/test2/test
   - Retrieves the value "ok!" for the key "test"
 - curl -i -X DELETE localhost:3000/test2/test
   - Deletes the value "ok!" for the key "test"
-- curl -i -X GET localhost:3000/test2/test
-  - Fails to retrieve the deleted value for the key "test"
+- curl -i --head localhost:3000/test2/test
+  - No value found for the key "test"
 
 ## Test 3
 
