@@ -35,6 +35,7 @@
 
 ## Test 2
 
+- Create-Read-Update-Delete (CRUD) REST API example
 - From a Key-Value store example
   - https://github.com/fermyon/spin/tree/main/examples/rust-key-value
 - Also demonstrates how to use the Spin Router
