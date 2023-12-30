@@ -111,8 +111,10 @@ fn make_include_prompt(
     include_prompt.push_str(item);
     if i == items_length - 1 {
       include_prompt.push('.');
-    } else {
+    } else if items_length > 2 {
       include_prompt.push_str(", ");
+    } else {
+      include_prompt.push(' ');
     }
   }
   include_prompt
@@ -139,6 +141,7 @@ fn make_prompt(input: Input) -> String {
       "character",
     ));
   }
+  prompt.push(' ');
   if let Some(objects) = input.objects {
     prompt.push_str(&make_include_prompt(&objects, "objects", "object"));
   }
