@@ -110,7 +110,7 @@ fn make_include_prompt(
     }
     include_prompt.push_str(item);
     if i == items_length - 1 {
-      include_prompt.push_str(". ");
+      include_prompt.push_str(".");
     } else {
       include_prompt.push_str(", ");
     }
