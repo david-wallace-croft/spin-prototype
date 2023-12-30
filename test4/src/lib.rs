@@ -5,6 +5,9 @@ use spin_sdk::http::{IntoResponse, Json, Response};
 use spin_sdk::llm::InferencingResult;
 use spin_sdk::{http_component, llm};
 
+#[cfg(test)]
+mod tests;
+
 #[derive(Clone, Deserialize)]
 struct Input {
   #[serde(default)]
@@ -101,11 +104,11 @@ fn make_include_prompt(
   }
   let mut include_prompt: String =
     format!("The story should include the following {}: ", plural);
-  for i in 0..items_length {
+  for (i, item) in items.iter().enumerate() {
     if i == items_length - 1 {
       include_prompt.push_str("and ");
     }
-    include_prompt.push_str(&items[i]);
+    include_prompt.push_str(item);
     if i == items_length - 1 {
       include_prompt.push_str(". ");
     } else {
