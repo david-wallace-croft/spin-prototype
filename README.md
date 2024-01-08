@@ -1,11 +1,12 @@
-# Spin Prototype
+# CroftSoft Spin Prototype
 
 [![MIT licensed][mit-badge]][mit-url]
 
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [mit-url]: https://github.com/david-wallace-croft/spin-prototype/blob/main/LICENSE.txt
 
-- My first Fermyon Spin application
+- A collection of Fermyon Spin example components
+  - Rust code compiled to WebAssembly (Wasm) running as Serverless in the Cloud
 
 ## Usage
 
@@ -22,18 +23,19 @@
     - Update the path to spin_static_fs.wasm in spin.toml
     - spin up --direct-mounts
 
-## Test 0
+## Test 0: Static File Server
+
 - Demonstrates using a static file server
 - http://localhost:3000/test0
   - Shows "test0"
 
-## Test 1
+## Test 1: Hello World
 
 - Default application from the template http-rust
 - http://localhost:3000/test1
   - Shows "Hello, Fermyon"
 
-## Test 2
+## Test 2: CRUD REST API
 
 - Create-Read-Update-Delete (CRUD) REST API example
 - From a Key-Value store example
@@ -51,7 +53,7 @@
 - curl -i --head localhost:3000/test2/test
   - No value found for the key "test"
 
-## Test 3
+## Test 3: JSON I/O
 
 - Demonstrates JSON input and output
 - Post the name in a JSON object
@@ -62,24 +64,32 @@ curl -i -X POST \
   localhost:3000/test3
 ```
 
-## Test 4
+## Test 4: AI LLM
 
-- Demonstrates use of a Large Language Model (LLM)
+- Demonstrates use of an Artificial Intelligence (AI) Large Language Model (LLM)
 ```
 curl -i -X POST \
   -d "{\"characters\": [\"Gilgamesh\", \"Utnapishtim\"]}" \
   localhost:3000/test4
 ```
 
-## Test 5
+## Test 5: REST from Spin
+
 - Demonstrates calling a REST API from a Spin Component
 - http://localhost:3000/test5?name=World
   - Shows relayed output from Test 3
+
+## TODO
+
+- Authentication (AuthN) / Authorization (AuthZ) example
+  - Might use OAuth 2.0 / OpenID Connect (OIDC)
 
 ## Links
 
 - Fermyon Spin
   - https://www.fermyon.com/spin
+- CroftSoft Advent of Spin Solutions
+  - https://github.com/david-wallace-croft/advent-of-spin
 
 ## History
 
