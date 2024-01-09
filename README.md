@@ -33,7 +33,7 @@
 
 - Default application from the template http-rust
 - http://localhost:3000/test1
-  - Shows "Hello, Fermyon"
+  - Shows "Hello, World!"
 
 ## Test 2: CRUD REST API
 
