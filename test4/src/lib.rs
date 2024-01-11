@@ -62,12 +62,12 @@ fn handle_request(request: Request<Json<Input>>) -> Result<impl IntoResponse> {
 fn confabulate(input: Input) -> Output {
   let prompt: String = make_prompt(input);
   let options = InferencingParams {
-    max_tokens: 500,
+    max_tokens: 1_000,
     repeat_penalty: 1.2,
     repeat_penalty_last_n_token_count: 0,
     temperature: 0.7,
     top_k: 0,
-    top_p: 1.0,
+    top_p: 1.,
   };
   let infer_result: Result<InferencingResult, llm::Error> =
     llm::infer_with_options(InferencingModel::Llama2Chat, &prompt, options);
