@@ -124,7 +124,7 @@ fn make_include_prompt(
 fn make_prompt(input: Input) -> String {
   let mut prompt: String = "Tell a story. \
     The story should have a happy ending. \
-    The story should be between 250 and 500 words long. "
+    The story should be between 100 and 300 words long. "
     .to_owned();
   if let Some(theme) = input.theme {
     prompt.push_str(&format!("The story should have a theme of {}. ", theme));
