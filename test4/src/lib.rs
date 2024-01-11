@@ -1,9 +1,12 @@
-use http::{Method, StatusCode};
+use anyhow::Result;
+use http::{Method, Request, StatusCode};
 use serde::{Deserialize, Serialize};
 use spin_sdk::http::conversions::IntoBody;
 use spin_sdk::http::{IntoResponse, Json, Response};
-use spin_sdk::llm::InferencingResult;
-use spin_sdk::{http_component, llm};
+use spin_sdk::http_component;
+use spin_sdk::llm::{
+  self, InferencingModel, InferencingParams, InferencingResult,
+};
 
 #[cfg(test)]
 mod tests;
@@ -29,19 +32,21 @@ struct Output {
 
 impl IntoBody for Output {
   fn into_body(self) -> Vec<u8> {
-    serde_json::to_string(&self).unwrap().into_body()
+    let result: Result<String, serde_json::Error> =
+      serde_json::to_string(&self);
+    let json: String = result.unwrap();
+    json.into_body()
   }
 }
 
 #[http_component]
-fn handle_request(
-  req: http::Request<Json<Input>>
-) -> anyhow::Result<impl IntoResponse> {
-  let (status, body): (StatusCode, Option<Output>) = match *req.method() {
+fn handle_request(request: Request<Json<Input>>) -> Result<impl IntoResponse> {
+  let method: &Method = request.method();
+  let (status, body): (StatusCode, Option<Output>) = match *method {
     Method::POST => {
-      let json_input: &Json<Input> = req.body();
+      let json_input: &Json<Input> = request.body();
       let input: Input = json_input.0.clone();
-      let output = confabulate(input);
+      let output: Output = confabulate(input);
       (StatusCode::OK, Some(output))
     },
     _ => (StatusCode::METHOD_NOT_ALLOWED, None),
@@ -55,26 +60,22 @@ fn handle_request(
 }
 
 fn confabulate(input: Input) -> Output {
-  let prompt = make_prompt(input);
-  let options = llm::InferencingParams {
-    max_tokens: 1000,
+  let prompt: String = make_prompt(input);
+  let options = InferencingParams {
+    max_tokens: 500,
     repeat_penalty: 1.2,
     repeat_penalty_last_n_token_count: 0,
     temperature: 0.7,
     top_k: 0,
     top_p: 1.0,
   };
-  let infer_result: Result<InferencingResult, spin_sdk::llm::Error> =
-    llm::infer_with_options(
-      llm::InferencingModel::Llama2Chat,
-      &prompt,
-      options,
-    );
-  let result = match &infer_result {
+  let infer_result: Result<InferencingResult, llm::Error> =
+    llm::infer_with_options(InferencingModel::Llama2Chat, &prompt, options);
+  let result: String = match &infer_result {
     Ok(inferencing_result) => format!("{:?}", inferencing_result),
     Err(error) => format!("Error: {:?}", error),
   };
-  let story = match infer_result {
+  let story: String = match infer_result {
     Ok(inferencing_result) => inferencing_result.text,
     Err(_error) => String::new(),
   }
@@ -92,7 +93,7 @@ fn make_include_prompt(
   plural: &str,
   singular: &str,
 ) -> String {
-  let items_length = items.len();
+  let items_length: usize = items.len();
   if items_length == 0 {
     return String::new();
   }
@@ -121,7 +122,7 @@ fn make_include_prompt(
 }
 
 fn make_prompt(input: Input) -> String {
-  let mut prompt = "Tell a story. \
+  let mut prompt: String = "Tell a story. \
     The story should have a happy ending. \
     The story should be between 250 and 500 words long. "
     .to_owned();
