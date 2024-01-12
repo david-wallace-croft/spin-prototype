@@ -33,7 +33,7 @@
 
 - Default application from the template http-rust
 - http://localhost:3000/test1
-  - Shows "Hello, World!"
+  - Shows "Header spin-full-url: http://localhost:3000/test1"
 
 ## Test 2: CRUD REST API
 
