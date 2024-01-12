@@ -1,4 +1,5 @@
-use http::{Method, StatusCode};
+use anyhow::Result;
+use http::{Method, Request, StatusCode};
 use serde::{Deserialize, Serialize};
 use spin_sdk::http::conversions::IntoBody;
 use spin_sdk::http::{IntoResponse, Json, Response};
@@ -16,17 +17,19 @@ struct Output {
 
 impl IntoBody for Output {
   fn into_body(self) -> Vec<u8> {
-    serde_json::to_string(&self).unwrap().into_body()
+    let result: Result<String, serde_json::Error> =
+      serde_json::to_string(&self);
+    let json: String = result.unwrap();
+    json.into_body()
   }
 }
 
 #[http_component]
-fn handle_test3(
-  req: http::Request<Json<Input>>
-) -> anyhow::Result<impl IntoResponse> {
-  let (status, body): (StatusCode, Option<Output>) = match *req.method() {
+fn handle_request(request: Request<Json<Input>>) -> Result<impl IntoResponse> {
+  let method: &Method = request.method();
+  let (status, body): (StatusCode, Option<Output>) = match *method {
     Method::POST => {
-      let json_input: &Json<Input> = req.body();
+      let json_input: &Json<Input> = request.body();
       let output = Output {
         message: format!("Hello, {}!", json_input.name),
       };
