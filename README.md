@@ -11,7 +11,7 @@
 ## Usage
 
 - Install the Fermyon Spin command line utility "spin"
-  - https://developer.fermyon.com/spin/v2/install
+  - https://github.com/fermyon/spin/releases/
 - spin build
 - spin up
   - If running on Windows, you might have to do some workarounds
